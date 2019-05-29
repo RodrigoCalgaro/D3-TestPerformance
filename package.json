@@ -1,0 +1,25 @@
+{
+  "name": "decisiontree",
+  "productName": "Decision Tree C4.5",
+  "version": "1.0.0",
+  "description": "Implementación del Algoritmo C4.5 de resolución de árboles de decisión para atributos continuos",
+  "main": "index.js",
+  "scripts": {
+    "start": "electron index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "package-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=assets/icons/mac/icon.icns --prune=true --out=release-builds",
+    "package-win": "electron-packager . decisiontree --overwrite --asar=true --platform=win32 --arch=ia32 --icon=assets/icons/win/icon.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"Decision Tree C4.5\"",
+    "package-linux": "electron-packager . decisiontree --overwrite --asar=true --platform=linux --arch=x64 --icon=assets/icons/png/1024x1024.png --prune=true --out=release-builds"
+  },
+  "author": "Rodrigo Calgaro",
+  "license": "ISC",
+  "dependencies": {
+    "csv": "^5.1.1",
+    "datatables.net": "^1.10.19",
+    "datatables.net-dt": "^1.10.19"
+  },
+  "devDependencies": {
+    "electron": "^4.1.4",
+    "electron-packager": "^13.1.1"
+  }
+}
