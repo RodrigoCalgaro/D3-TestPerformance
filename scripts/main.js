@@ -2,10 +2,10 @@ const dialog = require('electron').remote.dialog;
 const csv = require('csv');
 var fs = require('fs');
 var A = ['X', 'Y'];
-var threshold = parseFloat(document.querySelector("#threshold").value);
-var calculateUsing = document.querySelector("#calculateUsing").value;
-var porcForTest = parseFloat(document.querySelector("#porcForTest").value/100);
-var cantPruebas = parseInt(document.querySelector("#cantPruebas").value);
+var threshold; // = parseFloat(document.querySelector("#threshold").value);
+var calculateUsing; // = document.querySelector("#calculateUsing").value;
+var porcForTest; // = parseFloat(document.querySelector("#porcForTest").value/100);
+var cantPruebas; // = parseInt(document.querySelector("#cantPruebas").value);
 var DatasetLength = 0;
 var D = [];
 var DforTest = [];
@@ -28,6 +28,10 @@ document.getElementById('select-file').addEventListener('click', () => {
             console.log("No file selected");
         } else {
             if (confirm(`Generar Árbol de Decisión para ${fileNames[0]}`)) {
+                threshold = parseFloat(document.querySelector("#threshold").value);
+                calculateUsing = document.querySelector("#calculateUsing").value;
+                porcForTest = parseFloat(document.querySelector("#porcForTest").value/100);
+                cantPruebas = parseInt(document.querySelector("#cantPruebas").value);
                 document.getElementById("actual-file").value = fileNames[0];
                 document.querySelector("#csv-entrenamiento").classList.add('d-none');
                 document.querySelector("#reset").classList.remove('d-none');
@@ -67,6 +71,7 @@ function readFile(filepath) {
                     <td>${t_ejecucion}</td>
                     <td>${mem_usage}</td>
                 </tr>`
+                Arbol = null;
                 DatasetLength = 0;
                 D = [];
                 DforTest = [];
@@ -119,7 +124,8 @@ async function procesarDataset(dataRaw) {
 }
 
 function calcularExactitud(DforTest) {
-    cantCasos = D.length
+    cantCasos = DforTest.length
+    cantCorrectas = 0
     DforTest.forEach(async point => {
         await clasificarElemento(point, Arbol)
     })

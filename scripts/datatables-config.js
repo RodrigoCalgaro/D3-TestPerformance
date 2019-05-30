@@ -41,7 +41,7 @@ function InitDataTable(tableId) {
                         exportOptions: {
                             columns: ':not(.not-export-col)',
                             modifier: {
-                                page: 'current',
+                                page: 'all',
 
                             }
                         }
