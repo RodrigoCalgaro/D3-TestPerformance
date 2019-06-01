@@ -286,7 +286,7 @@ function giveMeTheBest(Ai, D, p0) {
         if (!best) {
             best = aux
         } else {
-            if (calculateUsing == 'gain') {
+            if (calculateUsing == 'gainRatio') {
                 if (aux.gainRatio > best.gainRatio) {
                     best = aux
                 }
