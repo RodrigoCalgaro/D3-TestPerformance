@@ -5,6 +5,7 @@ var A = ['X', 'Y'];
 var threshold; // = parseFloat(document.querySelector("#threshold").value);
 var calculateUsing; // = document.querySelector("#calculateUsing").value;
 var porcForTest; // = parseFloat(document.querySelector("#porcForTest").value/100);
+var porcForTrain; // = parseFloat(document.querySelector("#porcForTrain").value/100);
 var cantPruebas; // = parseInt(document.querySelector("#cantPruebas").value);
 var DatasetLength = 0;
 var D = [];
@@ -31,6 +32,7 @@ document.getElementById('select-file').addEventListener('click', () => {
                 threshold = parseFloat(document.querySelector("#threshold").value);
                 calculateUsing = document.querySelector("#calculateUsing").value;
                 porcForTest = parseFloat(document.querySelector("#porcForTest").value/100);
+                porcForTrain = parseFloat(document.querySelector("#porcForTrain").value/100);
                 cantPruebas = parseInt(document.querySelector("#cantPruebas").value);
                 document.getElementById("actual-file").value = fileNames[0];
                 document.querySelector("#csv-entrenamiento").classList.add('d-none');
@@ -105,9 +107,18 @@ async function procesarDataset(dataRaw) {
         data.splice(positionRandom,1)
     }
     
-    data.forEach(row => {
+    var cantForTrain = Math.round(DatasetLength * porcForTrain)
+    
+    for (let i = 0; i < cantForTrain; i++) {
+        const positionRandom = Math.round(Math.random() * (data.length-1))
+        const element = data[positionRandom]
+        D.push(new Point(parseFloat(element[0]), parseFloat(element[1]), element[2]))
+        data.splice(positionRandom,1)
+    }
+
+    /* data.forEach(row => {
         D.push(new Point(parseFloat(row[0]), parseFloat(row[1]), row[2]))
-    })
+    }) */
 
     var t_inicial = Date.now();
     var mem_inicial = process.memoryUsage().heapUsed
