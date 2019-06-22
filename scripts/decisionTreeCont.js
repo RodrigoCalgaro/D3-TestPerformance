@@ -1,13 +1,13 @@
 var Arbol = null;
 var threshold = 0;
-var calculateUsing = 'gain';
+//var calculateUsing = 'gain';
 var cantTotalRegistros = 0;
 
 
 async function generarArbol(D, A, umbral, use) {
     cantTotalRegistros = D.length;
     threshold = umbral;
-    calculateUsing = use;
+    //calculateUsing = use;
 
     var result = await decisionTree(D, A, Arbol, "root", '');
     return result;
