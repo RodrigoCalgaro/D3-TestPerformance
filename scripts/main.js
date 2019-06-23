@@ -1,4 +1,5 @@
 const dialog = require('electron').remote.dialog;
+const path = require('path')
 const csv = require('csv');
 var fs = require('fs');
 var A = ['X', 'Y'];
@@ -17,6 +18,9 @@ var t_ejecucion = 0;
 var mem_usage = 0;
 var tableBody = document.querySelector("#tbody")
 var id = 1
+var datasetName;
+var results = document.querySelector("#results")
+
 
 /* Agrego un evento al botón "Seleccionar Archivo" para que despliegue el cuadro de selección de archivos */
 document.getElementById('select-file').addEventListener('click', () => {
@@ -29,6 +33,9 @@ document.getElementById('select-file').addEventListener('click', () => {
             console.log("No file selected");
         } else {
             if (confirm(`Generar Árbol de Decisión para ${fileNames[0]}`)) {
+
+                datasetName = path.basename(fileNames[0]).split('.')[0];
+
                 threshold = parseFloat(document.querySelector("#threshold").value);
                 calculateUsing = document.querySelector("#calculateUsing").value;
                 porcForTest = parseFloat(document.querySelector("#porcForTest").value/100);
@@ -60,6 +67,9 @@ function readFile(filepath) {
                 return false;
             }
 
+            var exactitudAcum = 0
+            var tiempoAcum = 0
+
             for (let i = 0; i < cantPruebas; i++) {
                 await procesarDataset(data)
                 tableBody.innerHTML += `<tr>
@@ -69,10 +79,14 @@ function readFile(filepath) {
                     <td>${threshold}</td>
                     <td>${D.length}</td>
                     <td>${DforTest.length}</td>
-                    <td>${exactitud}</td>
-                    <td>${t_ejecucion}</td>
+                    <td id='exactitud'>${exactitud}</td>
+                    <td id='tiempoEjecucion'>${t_ejecucion}</td>
                     <td>${mem_usage}</td>
                 </tr>`
+
+                exactitudAcum += parseFloat(exactitud)
+                tiempoAcum += t_ejecucion
+
                 Arbol = null;
                 DatasetLength = 0;
                 D = [];
@@ -83,8 +97,32 @@ function readFile(filepath) {
                 t_ejecucion = 0;
                 mem_usage = 0;
                 id += 1
+
             }
+
             InitDataTable("#tabla");
+
+            var exactitudes = document.querySelectorAll('#exactitud')
+            var tiemposEjecucion = document.querySelectorAll('#tiempoEjecucion')
+
+            var exactitudMedia = exactitudAcum/cantPruebas;
+            var tiempoMedio = tiempoAcum/cantPruebas;
+            var sdExactitud;
+            var sdTiempo;
+
+            var sdExactitudAcum = 0
+            exactitudes.forEach(exact => {
+                sdExactitudAcum += (parseFloat(exact.innerHTML) - exactitudMedia) ** 2
+            })
+            sdExactitud = Math.sqrt(sdExactitudAcum/cantPruebas).toFixed(2)
+
+            var sdTiempoAcum = 0
+            tiemposEjecucion.forEach(tiempo => {
+                sdTiempoAcum += (parseFloat(tiempo.innerHTML) - tiempoMedio) ** 2
+            })
+            sdTiempo = Math.sqrt(sdTiempoAcum/cantPruebas).toFixed(2)
+            
+            results.innerHTML = `Exactitud ${exactitudMedia.toFixed(2)} ± ${sdExactitud}. Tiempo: ${tiempoMedio.toFixed(2)} ± ${sdTiempo}`
         })
 
     });

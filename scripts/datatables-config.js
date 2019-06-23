@@ -1,5 +1,4 @@
 var MyDataTable;
-var titulo = document.querySelector("#titulo");
 
 function InitDataTable(tableId) {
     jQuery(function ($) {
@@ -37,7 +36,7 @@ function InitDataTable(tableId) {
                         text: 'Exportar a Excel',
                         className: 'btn btn-dark btn-large',
                         titleAttr: 'Exportar a Excel',
-                        title: document.getElementById("titulo").getAttribute("data-value"),
+                        title: datasetName + ' - ' + (porcForTrain*100) + '-' + (porcForTest*100) + ' - ' + calculateUsing,
                         exportOptions: {
                             columns: ':not(.not-export-col)',
                             modifier: {
